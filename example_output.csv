@@ -1,0 +1,10 @@
+Sequence S,Sequence T,Leading razor protein_P,Start position_P,End position_P,Record ID,First cleavage site,Second cleavage site,Peptide status,LiP site,Modifications
+NISNFNNALESK,VITNQYNNPAGLYSSENISNFNNALESK,O00151,155,166,O00151,Non-tryptic,Tryptic,Half tryptic,155,No modifications found
+TASPASSTTAR,SAMPFTASPASSTTAR,O00151,128,138,O00151,Non-tryptic,Tryptic,Half tryptic,128,No modifications found
+TVGGFAPMSPR,DVTNFTVGGFAPMSPR,O00267,658,668,O00267,Non-tryptic,Tryptic,Half tryptic,658,No modifications found
+SAPLPGLSAPGR,ASAPLPGLSAPGR,O14558,16,27,O14558,Non-tryptic,Tryptic,Half tryptic,16,['Phosphoserine; by PKA(16)']
+DYDHDAFLGAEEAK,VHNDAQSFDYDHDAFLGAEEAK,O43852,46,59,O43852,Non-tryptic,Tryptic,Half tryptic,46,No modifications found
+GNSEDHTALSR,SAAMLGNSEDHTALSR,O60749,352,362,O60749,Non-tryptic,Tryptic,Half tryptic,352,No modifications found
+ETPGATPGSK,GSETPGATPGSK,O75533,243,252,O75533,Non-tryptic,Tryptic,Half tryptic,243,No modifications found
+VHNDAQSF,VHNDAQSFDYDHDAFLGAEEAK,O43852,38,45,O43852,Tryptic,Non-tryptic,Half tryptic,46,No modifications found
+LLEDGEDFNLGDAL,LLEDGEDFNLGDALDSSNSMQTIQK,P05783,383,396,P05783,Tryptic,Non-tryptic,Half tryptic,397,No modifications found
