@@ -1,10 +1,10 @@
 Sequence S,Sequence T,Leading razor protein_P,Start position_P,End position_P,Record ID,First cleavage site,Second cleavage site,Peptide status,LiP site,Modifications
-NISNFNNALESK,VITNQYNNPAGLYSSENISNFNNALESK,O00151,155,166,O00151,Non-tryptic,Tryptic,Half tryptic,155,No modifications found
-TASPASSTTAR,SAMPFTASPASSTTAR,O00151,128,138,O00151,Non-tryptic,Tryptic,Half tryptic,128,No modifications found
-TVGGFAPMSPR,DVTNFTVGGFAPMSPR,O00267,658,668,O00267,Non-tryptic,Tryptic,Half tryptic,658,No modifications found
-SAPLPGLSAPGR,ASAPLPGLSAPGR,O14558,16,27,O14558,Non-tryptic,Tryptic,Half tryptic,16,['Phosphoserine; by PKA(16)']
-DYDHDAFLGAEEAK,VHNDAQSFDYDHDAFLGAEEAK,O43852,46,59,O43852,Non-tryptic,Tryptic,Half tryptic,46,No modifications found
+NISNFNNALESK,VITNQYNNPAGLYSSENISNFNNALESK,O00151,155,166,O00151,Non-tryptic,Tryptic,Half tryptic,155,['Phosphorylation(151)']
+TASPASSTTAR,SAMPFTASPASSTTAR,O00151,128,138,O00151,Non-tryptic,Tryptic,Half tryptic,128,"['Phosphoserine(130)', 'Phosphorylation(128)', 'Phosphorylation(130)', 'Phosphorylation(133)']"
+TVGGFAPMSPR,DVTNFTVGGFAPMSPR,O00267,658,668,O00267,Non-tryptic,Tryptic,Half tryptic,658,"['Phosphorylation(655)', 'Phosphorylation(658)']"
+SAPLPGLSAPGR,ASAPLPGLSAPGR,O14558,16,27,O14558,Non-tryptic,Tryptic,Half tryptic,16,"['Phosphoserine; by PKA(16)', 'Phosphorylation(16)']"
+DYDHDAFLGAEEAK,VHNDAQSFDYDHDAFLGAEEAK,O43852,46,59,O43852,Non-tryptic,Tryptic,Half tryptic,46,"['Phosphoserine(44)', 'Phosphotyrosine(47)', 'Phosphorylation(44)', 'Phosphorylation(47)']"
 GNSEDHTALSR,SAAMLGNSEDHTALSR,O60749,352,362,O60749,Non-tryptic,Tryptic,Half tryptic,352,No modifications found
-ETPGATPGSK,GSETPGATPGSK,O75533,243,252,O75533,Non-tryptic,Tryptic,Half tryptic,243,No modifications found
-VHNDAQSF,VHNDAQSFDYDHDAFLGAEEAK,O43852,38,45,O43852,Tryptic,Non-tryptic,Half tryptic,46,No modifications found
-LLEDGEDFNLGDAL,LLEDGEDFNLGDALDSSNSMQTIQK,P05783,383,396,P05783,Tryptic,Non-tryptic,Half tryptic,397,No modifications found
+ETPGATPGSK,GSETPGATPGSK,O75533,243,252,O75533,Non-tryptic,Tryptic,Half tryptic,243,"['Phosphothreonine(244)', 'Phosphothreonine(248)', 'Phosphorylation(242)', 'Phosphorylation(244)', 'Phosphorylation(248)']"
+VHNDAQSF,VHNDAQSFDYDHDAFLGAEEAK,O43852,38,45,O43852,Tryptic,Non-tryptic,Half tryptic,46,"['Phosphoserine(44)', 'Phosphotyrosine(47)', 'Phosphorylation(44)', 'Phosphorylation(47)']"
+LLEDGEDFNLGDAL,LLEDGEDFNLGDALDSSNSMQTIQK,P05783,383,396,P05783,Tryptic,Non-tryptic,Half tryptic,397,"['Phosphoserine(398)', 'Phosphoserine(399)', 'Phosphoserine(401)', 'Phosphorylation(398)', 'Phosphorylation(399)', 'Phosphorylation(401)']"
