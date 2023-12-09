@@ -12,11 +12,72 @@ import os
 from Bio.SeqIO.FastaIO import SimpleFastaParser
 import numpy as np
 from bioservices import UniProt
+import requests, sys
 
 db_path = r"C:\Users\lawashburn\Documents\collaborations\Haiyan\phospho_glyco_20231009\uniprot-download_true_format_fasta_query__28Homo_20sapiens_29_20AND_-2022.11.22-18.39.02.76.fasta" #database fasta path
 data_path = r"C:\Users\lawashburn\Documents\collaborations\Haiyan\phospho_glyco_20231009\example_input.csv"
 output_path = r"C:\Users\lawashburn\Documents\collaborations\Haiyan\phospho_glyco_20231009\output"
-PTM_site_variance = 0
+PTM_site_variance = 5
+
+def UniProt_search(prot_query):
+    u = UniProt()
+    res = u.get_df(prot_query.split())
+    ptm = res['Modified residue'].iloc[0]
+    ptm_split = ptm.split('MOD_RES ')
+    ptm_split = ptm_split[1:]
+    ptm_df = pd.DataFrame(
+             {'Res #': ptm_split})
+    ptm_df[['Res #','type','evidence']] = ptm_df['Res #'].str.split('; /',expand=True)
+    ptm_df['evidence'] = 'UniProt'
+    ptm_df['type'] = ptm_df['type'].replace({'note=': '','"':''}, regex=True)
+    return ptm_df
+
+def pride_search(prot_query):
+    requestURL = "https://www.ebi.ac.uk/proteins/api/proteomics-ptm/" + prot_query
+    r = requests.get(requestURL, headers={ "Accept" : "application/json"})
+
+    if not r.ok:
+      r.raise_for_status()
+      sys.exit()
+
+    responseBody = r.text
+
+    #xrefs_index = responseBody.index('xrefs') +7
+
+    responseBody2 = list(responseBody.split("type"))
+
+    begin_storage = []
+    position_storage = []
+    ptm_name_storage = []
+
+    for a in range(1,len(responseBody2)):
+        responseBody3 = responseBody2[a]
+        responseBody4 = list(responseBody3.split(','))
+        
+        for b in responseBody4:
+            if 'begin' in b:
+                b_new = b.replace('"begin":"','')
+                b_new = b_new.replace('"','')
+                begin_storage.append(b_new)
+            elif 'position' in b:
+                b_new = b.replace('"position":','')
+                b_new = b_new.replace('"','')
+                position_storage.append(b_new)
+            elif 'ptms' in b:
+                b_new = b.replace('"ptms":[{"name":"','')
+                b_new = b_new.replace('"','')
+                ptm_name_storage.append(b_new)
+                
+    pride_mods_df = pd.DataFrame({'Mod name':ptm_name_storage,'Peptide begin position':begin_storage,'Mod position':position_storage})
+    pride_mods_df[["Peptide begin position", "Mod position"]] = pride_mods_df[["Peptide begin position", "Mod position"]].apply(pd.to_numeric)
+    pride_mods_df['Absolute PTM location'] = (pride_mods_df['Peptide begin position'] + pride_mods_df['Mod position'])-1
+    
+    res_no = pride_mods_df['Absolute PTM location'].values.tolist()
+    type_list =  pride_mods_df['Mod name'].values.tolist()
+    pride_mods_df_format = pd.DataFrame({'Res #':res_no,'type':type_list})
+    pride_mods_df_format['evidence'] = 'PRIDE'
+    
+    return pride_mods_df_format
 
 fasta_to_df = []
 title_to_df = []
@@ -31,13 +92,12 @@ fasta_df = pd.DataFrame()
 fasta_df['Record ID'] = title_to_df
 fasta_df['Protein Sequence'] = fasta_to_df
 fasta_df['Record ID']= fasta_df['Record ID'].str.split('|').str[1].str.strip('|')
-#%%
+
 data = pd.read_csv(data_path)
 merged = data.merge(fasta_df, left_on=('Leading razor protein_P'),right_on='Record ID', how='inner')
 queries = len(merged)
 protein_seqs = merged['Protein Sequence'].values.tolist()
 peptide_seqs = merged['Sequence S'].values.tolist()
-#%%
 
 pep_storage = []
 prot_storage = []
@@ -140,17 +200,11 @@ for index, row in lip_site_table.iterrows():
     prot_query = row['Leading razor protein_P']
     index_query = row['LiP site']
 
-    u = UniProt()
-    res = u.get_df(prot_query.split())
-    ptm = res['Modified residue'].iloc[0]
-    ptm_split = ptm.split('MOD_RES ')
-    ptm_split = ptm_split[1:]
-    ptm_df = pd.DataFrame(
-             {'Res #': ptm_split})
-    ptm_df[['Res #','type','evidence']] = ptm_df['Res #'].str.split('; /',expand=True)
-
-
-    ptm_df['type'] = ptm_df['type'].replace({'note=': '','"':''}, regex=True)
+    uniprot_ptm_df = UniProt_search(prot_query)
+    pride_ptm_df = pride_search(prot_query)
+    
+    ptm_df = pd.concat([uniprot_ptm_df, pride_ptm_df],ignore_index=True)
+    ptm_df["Res #"] = ptm_df["Res #"].apply(pd.to_numeric)
 
     res_begin = index_query - PTM_site_variance
     res_end = index_query + PTM_site_variance
@@ -170,7 +224,7 @@ for index, row in lip_site_table.iterrows():
 lip_site_table['Modifications'] = applicable_mod_storage
 
 lip_site_table = lip_site_table.drop(columns=['Protein sequence','Peptide sequence','Peptide start index','Peptide end index','Peptide length',
-                             'Protein cleavage before','Peptide first residue','Peptide last residue','Protein cleavage after','Protein Sequence'])
+                              'Protein cleavage before','Peptide first residue','Peptide last residue','Protein cleavage after','Protein Sequence'])
 
 file_out_path = output_path + '\\lip_site_PTM_finder_results.csv'
 with open(file_out_path,'w',newline='') as filec:
